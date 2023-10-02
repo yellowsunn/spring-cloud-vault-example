@@ -38,6 +38,30 @@ spring:
 spring:
   config:
     activate:
+      on-profile: dev
+    import:
+      - vault://kv/dev/application/mysql?prefix=mysql.
+      - vault://kv/dev/application/redis?prefix=spring.data.redis.
+  cloud:
+    vault:
+      host: 10.10.10.20
+      port: 8200
+      scheme: http
+      authentication: approle
+      app-role:
+        role-id: 28205ca4-cd5e-4ecb-85f8-28ff84dc1760
+        secret-id: 954da88d-463e-fbd1-2cd1-437324eea4e8
+        role: dev-apps-role
+  datasource:
+    hikari:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: ${mysql.jdbc-url}/spring_cloud_vault_example
+      username: ${mysql.username}
+      password: ${mysql.password}
+---
+spring:
+  config:
+    activate:
       on-profile: prod
     import:
       - vault://kv/prod/application/redis-cluster?prefix=spring.data.redis.

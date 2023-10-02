@@ -32,7 +32,6 @@ class CommentService(
             body = comment.body,
         ).also {
             commentCacheRepository.save(it)
-            logger.info("Cache a comment. id = {}", id)
         }
     }
 }

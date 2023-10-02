@@ -6,21 +6,23 @@ spring:
       ddl-auto: validate
     open-in-view: false
   flyway:
-    baseline-version: 0
+    enabled: false
+    baseline-on-migrate: true
   data:
     redis:
       connect-timeout: 3000
       timeout: 1000
 ---
 spring:
-  profiles:
-    active: local
+  config:
+    activate:
+      on-profile: local
   datasource:
     url: jdbc:h2:mem:testdb
     username: sa
   flyway:
-    baseline-on-migrate: true
-    locations: classpath:db/migration, classpath:db/migration/local
+    enabled: true
+    locations: classpath:db/migration, classpath:db/seed
   cloud:
     vault:
       enabled: false
@@ -32,3 +34,41 @@ spring:
     redis:
       host: localhost
       port: 63790
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+    import:
+      - vault://kv/prod/application/redis-cluster?prefix=spring.data.redis.
+      - vault://kv/prod/application/mysql-master?prefix=mysql.master.
+      - vault://kv/prod/application/mysql-slave?prefix=mysql.slave.
+  cloud:
+    vault:
+      host: 10.10.10.20
+      port: 8200
+      scheme: http
+      connection-timeout: 5000
+      read-timeout: 10000
+      authentication: approle
+      app-role:
+        role-id: 43c500fa-d7b8-403f-98b8-d2fd415a8f37
+        secret-id: ${vault.secret-id}
+        role: prod-apps-role
+  datasource:
+    master:
+      hikari:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: ${mysql.master.jdbc-url}/spring_cloud_vault_example
+        read-only: false
+        username: ${mysql.master.username}
+        password: ${mysql.master.password}
+    slave:
+      hikari:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: ${mysql.slave.jdbc-url}/spring_cloud_vault_example
+        read-only: true
+        username: ${mysql.slave.username}
+        password: ${mysql.slave.password}
+  flyway:
+    enabled: true

@@ -29,6 +29,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.springframework.cloud:spring-cloud-starter-vault-config")
     implementation("org.flywaydb:flyway-core")
+    implementation("org.flywaydb:flyway-mysql")
     implementation("it.ozimov:embedded-redis:0.7.3") {
         exclude("org.slf4j", "slf4j-simple")
     }

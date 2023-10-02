@@ -1,4 +1,4 @@
-create table comment
+create table if not exists comment
 (
     id      bigint       not null auto_increment,
     post_id bigint       not null,

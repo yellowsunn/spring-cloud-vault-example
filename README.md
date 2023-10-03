@@ -22,7 +22,7 @@ vault kv put kv/application/mysql username=foo password=bar
 	  secret_id=70048d62-11fd-4fa0-ac68-0b68a0c59b54
   ```
 * ACL Policy 추가
- ![스크린샷 2023-10-03 오후 4 25 46](https://github.com/yellowsunn/spring-cloud-vault-example/assets/43487002/d2e85876-8ae5-4d8b-83de-355fc3346940)
+![스크린샷 2023-10-03 오후 4 25 46](https://github.com/yellowsunn/spring-cloud-vault-example/assets/43487002/25e1ee02-14ee-4d7a-a857-8efd9fde0499)
 
 * AppRole에 Policy 연결
   ```
